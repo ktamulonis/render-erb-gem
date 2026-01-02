@@ -38,5 +38,3 @@ Step 3.
 ```sh
 include RenderErb
 ```
-
-# render-erb-gem
