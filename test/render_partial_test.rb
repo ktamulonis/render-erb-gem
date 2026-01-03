@@ -36,5 +36,34 @@ class RenderPartialTest < Minitest::Test
     assert_includes output, "<h1>Welcome</h1>"
     assert_includes output, "<p>Main content</p>"
   end
+
+  def test_render_partial_with_multiple_locals
+    File.write(
+      File.join(TEST_DIR, "page.html.erb"),
+      <<~ERB
+        <%= render_partial "header",
+              title: "Hello",
+              subtitle: "World"
+        %>
+      ERB
+    )
+
+    File.write(
+      File.join(TEST_DIR, "_header.html.erb"),
+      <<~ERB
+        <h1><%= title %></h1>
+        <h2><%= subtitle %></h2>
+      ERB
+    )
+
+    renderer = TestRenderer.new
+
+    output = renderer.render_template(
+      File.join(TEST_DIR, "page")
+    )
+
+    assert_includes output, "<h1>Hello</h1>"
+    assert_includes output, "<h2>World</h2>"
+  end
 end
 
